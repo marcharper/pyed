@@ -153,7 +153,11 @@ def best_reply_incentive(fitness):
     """Compute best reply to fitness landscape at state."""
     def g(state):
         f = fitness(state)
-        dim = state.size
+        try:
+            dim = state.size
+        except AttributeError:
+            state = numpy.array(state)
+            dim = state.size
         replies = []
         for i in range(dim):
             x = numpy.zeros(dim)
@@ -201,7 +205,7 @@ def constant_generator(h):
 def fictitious_play_generator(h):
     i = 1
     while True:
-        yield h / (i + 1)
+        yield float(h) / (i + 1)
         i += 1
 
 ## Functions to actually compute trajectories
@@ -221,7 +225,7 @@ def dynamics(state, incentive=None, G=None, h=1.0):
 def compute_trajectory(initial_state, incentive, iterations=2000, h=1/200., G=None, escort=None, exit_on_uniform=True, verbose=False, fitness=None):
     """Computes a trajectory of a dynamic until convergence or other exit condition is reached."""
     # Check if the time-scale is constant or not, and if it is, make it into a generator.
-    if not inspect.isgeneratorfunction(h):
+    if not inspect.isgenerator(h):
         h_gen = constant_generator(h)
     else:
         h_gen = h
@@ -265,6 +269,35 @@ def compute_trajectory(initial_state, incentive, iterations=2000, h=1/200., G=No
         # Re-normalize in case any values were rounded to 0.
         x = normalize(x)
     return t    
+
+def two_population_trajectory(params, iterations=2000, exit_on_uniform=True, verbose=False):
+    """Multipopulation trajectory -- each population has its own incentive, metric, and time-scale. This function only accepts metrics G and generators for h."""
+    t = [tuple(normalize(p[0]) for p in params)]
+    for j in range(iterations):
+        current_state = t[-1]
+        h = [p[2].next() for p in params]
+        i = params[0][1](current_state[1])
+        G = params[0][-1]
+        ones = numpy.ones(len(current_state[0]))
+        g = numpy.dot(numpy.linalg.inv(G(current_state[0])), ones)
+        #print i, g, h[0]
+        x = current_state[0] + h[0] * (i - g / numpy.dot(g, ones) * numpy.sum(i))
+        i = params[1][1](current_state[0])
+        G = params[1][-1]
+        ones = numpy.ones(len(current_state[1]))
+        g = numpy.dot(numpy.linalg.inv(G(current_state[1])), ones)
+        y = current_state[1] + h[1] * (i - g / numpy.dot(g, ones) * numpy.sum(i))
+
+        for i in range(len(x)):
+            x[i] = max(0, x[i])
+        for i in range(len(y)):
+            y[i] = max(0, y[i])
+        x = normalize(x)
+        y = normalize(y)
+        t.append((x, y))
+        if verbose:
+            print x, y
+    return t
     
 ### Analysis ##    
 
@@ -319,7 +352,7 @@ def basic_example():
     fitness = linear_fitness(m)
     incentive = replicator_incentive_power(fitness, 0)
     t = compute_trajectory(initial_state, incentive, escort=power_escort(0), iterations=10000)
-    ternary.plot(t)
+    ternary.plot(t, linewidth=2)
     ternary.draw_boundary()    
 
     ## Lyapunov Quantities
@@ -347,4 +380,6 @@ def basic_example():
     
 if __name__ == "__main__":
     #divergence_test()
-    basic_example()
+    #basic_example()
+    two_population_test()
+    
