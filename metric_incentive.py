@@ -263,10 +263,10 @@ def compute_trajectory(initial_state, incentive, iterations=2000, h=1/200., G=No
         # Iterate the dynamic.
         x = dynamics(x, incentive=incentive, G=G, h=h)
         # Check to make sure that the distribution has not left the simplex due to round-off.
-        # May conflict with out of simplex exit condition, but is useful for non-forward-invariant dynamics (such as projection dynamics).
+        # May conflict with out of simplex exit condition, but is useful for non-forward-invariant dynamics (such as projection dynamics). Note that this is very similar to Sandholm's projection and may be better handled that way.
         for i in range(len(x)):
             x[i] = max(0, x[i])
-        # Re-normalize in case any values were rounded to 0.
+        #Re-normalize in case any values were rounded to 0.
         x = normalize(x)
     return t    
 
