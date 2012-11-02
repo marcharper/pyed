@@ -36,7 +36,10 @@ def shannon_entropy(p):
         except ValueError:
             continue
     return -1.*s
-        
+
+def uniform_mutation_matrix(n, ep):
+    return (1. - ep) * numpy.eye(n) + ep / (n - 1.) * (numpy.ones(n) - numpy.eye(n))
+    
 ### Information Divergences ##    
 
 def kl_divergence(p, q):
@@ -210,19 +213,21 @@ def fictitious_play_generator(h):
 
 ## Functions to actually compute trajectories
 
-def dynamics(state, incentive=None, G=None, h=1.0):
+def dynamics(state, incentive=None, G=None, h=1.0, mu=None):
     """Compute the next iteration of the dynamic."""
     if not incentive:
         incentive = DEFAULT_INCENTIVE
     if not G:
         G = shahshahani_metric()
+    if mu is None:
+        mu = numpy.eye(len(state))
     ones = numpy.ones(len(state))
     g = numpy.dot(numpy.linalg.inv(G(state)), ones)
     i = incentive(state)
-    next_state = state + h * (i - g / numpy.dot(g, ones) * numpy.sum(i))
+    next_state = state + h * (numpy.dot(i, mu) - g / numpy.dot(g, ones) * numpy.sum(i))
     return next_state
 
-def compute_trajectory(initial_state, incentive, iterations=2000, h=1/200., G=None, escort=None, exit_on_uniform=True, verbose=False, fitness=None):
+def compute_trajectory(initial_state, incentive, iterations=2000, h=1/200., G=None, escort=None, exit_on_uniform=True, verbose=False, fitness=None, project=False, mu=None):
     """Computes a trajectory of a dynamic until convergence or other exit condition is reached."""
     # Check if the time-scale is constant or not, and if it is, make it into a generator.
     if not inspect.isgenerator(h):
@@ -261,11 +266,12 @@ def compute_trajectory(initial_state, incentive, iterations=2000, h=1/200., G=No
             break
         ## End Exit Conditions.
         # Iterate the dynamic.
-        x = dynamics(x, incentive=incentive, G=G, h=h)
+        x = dynamics(x, incentive=incentive, G=G, h=h, mu=mu)
         # Check to make sure that the distribution has not left the simplex due to round-off.
         # May conflict with out of simplex exit condition, but is useful for non-forward-invariant dynamics (such as projection dynamics). Note that this is very similar to Sandholm's projection and may be better handled that way.
-        for i in range(len(x)):
-            x[i] = max(0, x[i])
+        if project:
+            for i in range(len(x)):
+                x[i] = max(0, x[i])
         #Re-normalize in case any values were rounded to 0.
         x = normalize(x)
     return t    
@@ -351,7 +357,8 @@ def basic_example():
     m = rock_scissors_paper(a=1., b=-2.)
     fitness = linear_fitness(m)
     incentive = replicator_incentive_power(fitness, 0)
-    t = compute_trajectory(initial_state, incentive, escort=power_escort(0), iterations=10000)
+    mu = uniform_mutation_matrix(3, ep=0.2)
+    t = compute_trajectory(initial_state, incentive, escort=power_escort(0), iterations=10000, verbose=True, mu=mu)
     ternary.plot(t, linewidth=2)
     ternary.draw_boundary()    
 
@@ -377,9 +384,8 @@ def basic_example():
         #return numpy.array([[1., 1./x_2, 0], [0, 1./x_2, 1.], [1., 0, 1./x_3]])
     #t = compute_trajectory(initial_state, incentive, G=metric)
     
-    
 if __name__ == "__main__":
     #divergence_test()
-    #basic_example()
-    two_population_test()
+    basic_example()
+    #two_population_test()
     
