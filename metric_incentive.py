@@ -121,7 +121,7 @@ def metric_from_escort(escort):
 def shahshahani_metric():
     return metric_from_escort(DEFAULT_ESCORT)
 
-DEFAULT_METRIC = shahshahani_metric()    
+DEFAULT_METRIC = shahshahani_metric()
 
 ### Incentives ##
 
@@ -142,11 +142,13 @@ def replicator_incentive(fitness):
 
 def DEFAULT_INCENTIVE(f):
     return replicator_incentive(f)
-    
+
 def replicator_incentive_power(fitness, q):
     def g(x):
         y = []
+        #print q, x
         for i in range(len(x)):
+            #y.append(math.pow(max(x[i],0), q))
             y.append(math.pow(x[i], q))
         y = numpy.array(y)
         return y * fitness(x)
@@ -172,16 +174,16 @@ def best_reply_incentive(fitness):
         x[i] = 1
         return x
     return g 
-    
+
 def logit_incentive(fitness, eta):
     def f(x):
         return normalize(numpy.exp(fitness(x) / eta))
     return f
-    
+
 ### Simulation ###
 
 # Functions to check exit conditions.
-def is_uniform(x, epsilon=0.001):
+def is_uniform(x, epsilon=0.000000001):
     """Determine if the vector is uniform within epsilon tolerance. Useful to stop a simulation if the fitness landscape has become essentially uniform."""
     x_0 = x[0]
     for i in range(1, len(x)):
@@ -227,7 +229,7 @@ def dynamics(state, incentive=None, G=None, h=1.0, mu=None):
     next_state = state + h * (numpy.dot(i, mu) - g / numpy.dot(g, ones) * numpy.sum(i))
     return next_state
 
-def compute_trajectory(initial_state, incentive, iterations=2000, h=1/200., G=None, escort=None, exit_on_uniform=True, verbose=False, fitness=None, project=False, mu=None):
+def compute_trajectory(initial_state, incentive, iterations=2000, h=1/200., G=None, escort=None, exit_on_uniform=True, verbose=False, fitness=None, project=True, mu=None):
     """Computes a trajectory of a dynamic until convergence or other exit condition is reached."""
     # Check if the time-scale is constant or not, and if it is, make it into a generator.
     if not inspect.isgenerator(h):
@@ -274,7 +276,7 @@ def compute_trajectory(initial_state, incentive, iterations=2000, h=1/200., G=No
                 x[i] = max(0, x[i])
         #Re-normalize in case any values were rounded to 0.
         x = normalize(x)
-    return t    
+    return t
 
 def two_population_trajectory(params, iterations=2000, exit_on_uniform=True, verbose=False):
     """Multipopulation trajectory -- each population has its own incentive, metric, and time-scale. This function only accepts metrics G and generators for h."""
@@ -359,8 +361,9 @@ def basic_example():
     incentive = replicator_incentive_power(fitness, 0)
     mu = uniform_mutation_matrix(3, ep=0.2)
     t = compute_trajectory(initial_state, incentive, escort=power_escort(0), iterations=10000, verbose=True, mu=mu)
-    ternary.plot(t, linewidth=2)
-    ternary.draw_boundary()    
+    figure, tax = ternary.figure()
+    tax.plot(t, linewidth=2, color="black")
+    tax.boundary()
 
     ## Lyapunov Quantities
     pyplot.figure()
@@ -372,20 +375,7 @@ def basic_example():
     v = [d(e, x) for x in t]
     pyplot.plot(range(len(t)), v, color='r')    
     pyplot.show()
-    
-    ## Some example code that may be useful for best reply...
-    # Traditional best reply Lyapunov
-    #v = [numpy.max(fitness(x)) - numpy.dot(x, fitness(x)) for x in t]
-    #pyplot.plot(range(len(t)), v, color='b')
-    #pyplot.axhline(y=0)
 
-    #def metric(x):
-        #x_1, x_2, x_3 = x[0], x[1], x[2]
-        #return numpy.array([[1., 1./x_2, 0], [0, 1./x_2, 1.], [1., 0, 1./x_3]])
-    #t = compute_trajectory(initial_state, incentive, G=metric)
-    
 if __name__ == "__main__":
-    #divergence_test()
     basic_example()
-    #two_population_test()
-    
+
