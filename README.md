@@ -1,14 +1,17 @@
 
 # metric-incentive-dynamics
 
-This python script computes time-scale dynamics for the metric-incentive dynamic. Software dependencies include numpy, scipy, and python-ternary for graphing (which also requires matplotlib). python-ternary is available on github at https://github.com/marcharper/python-ternary All the others are standard python libraries that are available on most platforms (e.g. through a package manager on linux).
+This python script computes time-scale dynamics for the metric-incentive
+dynamic, used to create the plots in [this publication](http://link.springer.com/article/10.1007/s13235-014-0124-0).
 
 Basic Usage
 -----------
 
 The main function is compute_trajectory in the file metric_incentive.py, which takes several parameters:
 
-   def compute_trajectory(initial_state, incentive, iterations=2000, h=1/200., G=None, escort=None, exit_on_uniform=True, verbose=False, fitness=None):
+```
+    def compute_trajectory(initial_state, incentive, iterations=2000, h=1/200., G=None, escort=None, exit_on_uniform=True, verbose=False, fitness=None):
+```
 
 Let us consider each in turn. The initial_state is a numpy array that indicates the starting point of the dynamic. For instance, to start at the center of the simplex in a three-type dynamic, use:
 
@@ -39,7 +42,7 @@ This outputs:
     array([ 0.16666667,  0.25      ,  0.33333333])
 ```
 
-Compute trajectory has several additional arguments including:
+`compute_trajectory` has several additional arguments including:
 
 - *iterations* (optional: default=2000) is the maximum number of iterations that the dynamic will step through unless an exit condition is reached.
 -*h* (optional but you probably want to change it) is a constant (should be between 0 and 1) corresponding to the time scale, or a generator that produces successful values that are not necessarily the same.
