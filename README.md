@@ -39,19 +39,15 @@ This outputs:
     array([ 0.16666667,  0.25      ,  0.33333333])
 ```
 
-*iterations* (optional: default=2000) is the maximum number of iterations that the dynamic will step through unless an exit condition is reached.
+Compute trajectory has several additional arguments including:
 
-*h* (optional but you probably want to change it) is a constant (should be between 0 and 1) corresponding to the time scale, or a generator that produces successful values that are not necessarily the same.
-
-*G* (optional) is a Riemannian metric given as a function of a simplex variable. Again there are several helpers, such as *shahshahani_metric()* included in the code (which is the default). This parameter must return numpy array matrices at input points on the simplex.
-
-*escort* is another optional functional parameter that can be used instead of an entire metric (technically it defines a diagonal metric). If you specific both a metric and an escort, just the metric is used (and a warning is given).
-
-*exit_on_uniform* gives an exit condition to stop iteration early if the incentive vector is uniform, or very nearly so (which indicates convergence).
-
-*verbose* if True outputs each step of the dynamic to standard out.
-
-*fitness* is optional and used for reporting if verbose == True
+- *iterations* (optional: default=2000) is the maximum number of iterations that the dynamic will step through unless an exit condition is reached.
+-*h* (optional but you probably want to change it) is a constant (should be between 0 and 1) corresponding to the time scale, or a generator that produces successful values that are not necessarily the same.
+- *G* (optional) is a Riemannian metric given as a function of a simplex variable. Again there are several helpers, such as *shahshahani_metric()* included in the code (which is the default). This parameter must return numpy array matrices at input points on the simplex.
+- *escort* is another optional functional parameter that can be used instead of an entire metric (technically it defines a diagonal metric). If you specific both a metric and an escort, just the metric is used (and a warning is given).
+- *exit_on_uniform* gives an exit condition to stop iteration early if the incentive vector is uniform, or very nearly so (which indicates convergence).
+- *verbose* if True outputs each step of the dynamic to standard out.
+- *fitness* is optional and used for reporting if verbose == True
 
 Example
 -------
