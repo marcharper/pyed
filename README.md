@@ -1,8 +1,8 @@
-========================================================
-Documentation for python metric-incentive-dynamics code
-========================================================
 
-This python code computes time-scale dynamics for the metric-incentive dynamic. Software dependencies include numpy, scipy, and python-ternary for graphing (which also requires matplotlib). python-ternary is available on github at https://github.com/marcharper/python-ternary All the others are standard python libraries that are available on most platforms (e.g. through a package manager on linux).
+# metric-incentive-dynamics
+===========================
+
+This python script computes time-scale dynamics for the metric-incentive dynamic. Software dependencies include numpy, scipy, and python-ternary for graphing (which also requires matplotlib). python-ternary is available on github at https://github.com/marcharper/python-ternary All the others are standard python libraries that are available on most platforms (e.g. through a package manager on linux).
 
 Basic Usage
 -----------
