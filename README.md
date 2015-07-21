@@ -12,23 +12,32 @@ The main function is compute_trajectory in the file metric_incentive.py, which t
 
 Let us consider each in turn. The initial_state is a numpy array that indicates the starting point of the dynamic. For instance, to start at the center of the simplex in a three-type dynamic, use:
 
->>> from metric_incentive import *
->>> import numpy
->>> initial_state = normalize(numpy.array([1,1,1]))
+```
+    from metric_incentive import *
+    import numpy
+    initial_state = normalize(numpy.array([1,1,1]))
+```
 
 Strictly speaking, the normalization is not necessary (compute_trajectory will do it for you), nevertheless the normalizations function *normalize* is available.
 
 The second parameter, *incentive* is a function that takes a state and produces a vector (a numpy array) of the incentive values. Several incentives are included, such as *replicator_incentive*, which takes a fitness landscape (again a function taking a state to a vector) and produces an incentive:
 
->>> m = rock_scissors_paper(a=1, b=-2)
->>> m
-[[0, 2, 1], [1, 0, 2], [2, 1, 0]]
->>> fitness = linear_fitness(m)
->>> fitness(initial_state)
-array([ 1.,  1.,  1.])
->>> incentive = replicator_incentive(fitness)
->>> incentive(normalize(numpy.array([1,1,4])))
-array([ 0.16666667,  0.25      ,  0.33333333])
+```
+    m = rock_scissors_paper(a=1, b=-2)
+    print m
+    fitness = linear_fitness(m)
+    print fitness(initial_state)
+    incentive = replicator_incentive(fitness)
+    print incentive(normalize(numpy.array([1,1,4])))
+```
+
+This outputs:
+
+```
+    [[0, 2, 1], [1, 0, 2], [2, 1, 0]]
+    array([ 1.,  1.,  1.])
+    array([ 0.16666667,  0.25      ,  0.33333333])
+```
 
 *iterations* (optional: default=2000) is the maximum number of iterations that the dynamic will step through unless an exit condition is reached.
 
@@ -47,4 +56,4 @@ array([ 0.16666667,  0.25      ,  0.33333333])
 Example
 -------
 
-The function *basic_example* shows how to compute a trajectory, plot it in the simplex (for n=3), and plot candidate Lyapunov functions on the trajectory:
+The function *basic_example* shows how to compute a trajectory, plot it in the simplex (for n=3), and plot candidate Lyapunov functions on the trajectory.
