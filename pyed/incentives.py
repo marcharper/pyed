@@ -3,9 +3,6 @@
 from math import pow
 import numpy as np
 
-# def rock_scissors_paper(a=1, b=1):
-#     return [[0,-b,a], [a, 0, -b], [-b, a, 0]]
-
 
 def normalize(x):
     """Normalizes a numpy array by dividing by the sum."""
