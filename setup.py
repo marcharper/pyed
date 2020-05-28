@@ -14,7 +14,7 @@ setup(
     install_requires=requirements,
     author="Marc Harper",
     author_email="marcharper@gmail.com",
-    packages=["evodyn"],
+    packages=["pyed"],
     license="The MIT License (MIT)",
     description="Evolutionary Dynamics Trajectories",
     long_description_content_type="text/x-rst",
