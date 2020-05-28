@@ -1,8 +1,19 @@
 
 # metric-incentive-dynamics
 
+Repository History
+------------------
+
+Last updated: 2020-05-27
+
 This python script computes time-scale dynamics for the metric-incentive
-dynamic, used to create the plots in [this publication](http://link.springer.com/article/10.1007/s13235-014-0124-0).
+dynamic, used to create the plots in the publication
+[Lyapunov Functions for Time-Scale Dynamics on Riemannian Geometries of the Simplex](http://link.springer.com/article/10.1007/s13235-014-0124-0),
+also on the Arxiv preprint server with the name [Stability of Evolutionary Dynamics on Time Scales](https://arxiv.org/abs/1210.5539).
+
+This code was originally at the URL https://github.com/marcharper/metric-incentive-dynamics before being archived here.
+The repository https://github.com/marcharper/pyed . If you are trying to make similar plots, use the
+[pyed](https://github.com/marcharper/pyed) library at https://github.com/marcharper/pyed .
 
 Basic Usage
 -----------
