@@ -35,6 +35,7 @@ def exponential_escort(x):
 # Can also use metric_from_escort to get the Euclidean metric.
 def euclidean_metric(n=3):
     I = np.identity(n)
+
     def G(x):
         return I
     return G
@@ -47,6 +48,7 @@ def metric_from_escort(escort):
 
 
 def shahshahani_metric():
+    """Also known as the Fisher information metric."""
     return metric_from_escort(DEFAULT_ESCORT)
 
 
