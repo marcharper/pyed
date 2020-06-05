@@ -12,9 +12,14 @@ The tests and [several examples](examples/py) file contain several examples. The
 that produces several example trajectories:
 
 <div style="text-align:center">
-<img src="/images/convergence_divergence.png" width="150" height="150"/>
-<img src="/images/polyak_examples.png" width="150" height="150"/>
-<img src="/images/nesterov_examples.png" width="150" height="150"/>
+<img src="images/convergence_divergence.png" width="400" height="200"/>
+<br/>
+<img src="images/divergence_example.png" width="400" height="200"/>
+<br/>
+<img src="images/polyak_examples.png" width="400" height="200"/>
+<br/>
+<img src="images/nesterov_examples.png" width="400" height="200"/>
+<br/>
 </div>
 
 ## Tests
