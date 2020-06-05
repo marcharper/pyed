@@ -7,7 +7,7 @@ phase portraits of discrete replicator equations with various parameters, and ge
 
 ## Examples
 
-The tests and [several examples](examples/py) file contain several examples. There is also a
+The tests and [examples.py](examples.py) file contain several examples. There is also a
 [jupyter notebook](https://github.com/marcharper/pyed/blob/notebooks/Momentum%20Paper%20Figures.ipynb)
 that produces several example trajectories:
 
