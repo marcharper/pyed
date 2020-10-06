@@ -23,7 +23,7 @@ def basic_example():
     # Projection dynamic.
     initial_state = pyed.normalize(np.array([1, 1, 4]))
     m = pyed.incentives.rock_paper_scissors(a=1., b=-2.)
-    fitness = pyed.incentives..linear_fitness(m)
+    fitness = pyed.incentives.linear_fitness(m)
     incentive = pyed.incentives.replicator_incentive_power(fitness, 0)
     mu = pyed.incentives.uniform_mutation_matrix(3, ep=0.2)
     t = pyed.dynamics.compute_trajectory(
